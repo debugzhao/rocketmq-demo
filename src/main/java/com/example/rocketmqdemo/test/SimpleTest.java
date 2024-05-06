@@ -16,6 +16,8 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import static org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
@@ -33,6 +35,25 @@ public class SimpleTest {
      * name server地址
      */
     private static final String NAMESRV_ADDR = "127.0.0.1:9876";
+
+
+    /**
+     * 发送延时消息
+     */
+    @Test
+    public void testDelayMessage() throws Exception {
+        DefaultMQProducer producer = new DefaultMQProducer("test-oneway-group");
+        producer.setNamesrvAddr(NAMESRV_ADDR);
+        producer.start();
+        Message message = new Message("test-topic", "双11订单数据....".getBytes());
+        // 设置延时级别
+        // messageDelayLevel = "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
+        message.setDelayTimeLevel(3);
+        // 发送单向消息
+        producer.send(message);
+        log.info("订单消息发送时间: {}", LocalDateTime.now());
+        producer.shutdown();
+    }
 
     /**
      * 发送单向消息
@@ -109,12 +130,13 @@ public class SimpleTest {
         // 配置name server地址
         consumer.setNamesrvAddr(NAMESRV_ADDR);
         // 订阅主题，*表示订阅这个主题内所有消息
-        consumer.subscribe("test-oneway-topic", "*");
+        consumer.subscribe("test-topic", "*");
         // 注册消息监听器
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext context) {
                 // 这里写具体的消费业务逻辑
+                log.info("消息消费时间: {}", LocalDateTime.now());
                 log.info("消息扩展内容：{}", list.get(0).toString());
                 log.info("消息内容：{}", new String(list.get(0).getBody()));
                 log.info("消费上下文:{}", context.toString());
