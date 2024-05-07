@@ -1,4 +1,4 @@
-package com.example.rocketmqdemo.test;
+package com.example.rocketmqdemo.test.client;
 
 import com.example.rocketmqdemo.dto.OrderDto;
 import lombok.extern.slf4j.Slf4j;
