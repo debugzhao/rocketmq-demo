@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +36,24 @@ public class SimpleTest {
      * name server地址
      */
     private static final String NAMESRV_ADDR = "127.0.0.1:9876";
+
+    /**
+     * 批量发送消息
+     */
+    @Test
+    public void testBatchMessage() throws Exception {
+        DefaultMQProducer producer = new DefaultMQProducer("test-oneway-group");
+        producer.setNamesrvAddr(NAMESRV_ADDR);
+        producer.start();
+        List<Message> messages = Arrays.asList(
+            new Message("test-topic", "我是一组消息的A消息".getBytes()),
+            new Message("test-topic", "我是一组消息的B消息".getBytes()),
+            new Message("test-topic", "我是一组消息的C消息".getBytes())
+        );
+        SendResult sendResult = producer.send(messages);
+        log.info("批量发送消息结果:{}", sendResult);
+        producer.shutdown();
+    }
 
 
     /**
