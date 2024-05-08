@@ -1,8 +1,31 @@
 server:
   port: 8087
+  tomcat:
+    threads:
+      max: 300
+
+
+spring:
+  application:
+    name: seckill # 秒杀服务
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password: 123456
+    lettuce: # redis连接池配置
+      pool:
+        enabled: true
+        max-active: 100
+        max-idle: 20
+        min-idle: 5
 
 rocketmq:
   name-server: 127.0.0.1:9876
   producer:
     group: springboot-producer-group
+    send-message-timeout: 3000 # 发送消息超时时间
+    retry-times-when-send-async-failed: 3 # 异步发送消息失败重试次数
+    max-message-size: 4194304 # 消息最大长度4M
+
 

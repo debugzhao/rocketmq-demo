@@ -15,4 +15,14 @@ class RocketmqDemoApplicationTests {
     void testSendMessage() {
         rocketMqTemplate.syncSend("test-topic1", "hello,rocketmq");
     }
+
+    /**
+     * 测试负载均衡类型消费
+     */
+    @Test
+    void testSendMessage1() {
+        for (int i = 1; i <= 10; i++) {
+            rocketMqTemplate.syncSend("mode-topic", "我是消息" + i);
+        }
+    }
 }
