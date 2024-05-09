@@ -3,6 +3,7 @@ package com.example.rocketmqdemo.seckill.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.rocketmqdemo.seckill.domain.Goods;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author lucas
@@ -13,6 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface GoodsMapper extends BaseMapper<Goods> {
 
+    int updateStock(@Param("goodsId") int goodsId);
 }
 
 

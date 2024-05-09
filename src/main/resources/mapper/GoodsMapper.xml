@@ -2,6 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.rocketmqdemo.seckill.domain.Goods">
+<mapper namespace="com.example.rocketmqdemo.seckill.mapper.GoodsMapper">
 
+    <resultMap id="BaseResultMap" type="com.example.rocketmqdemo.seckill.domain.Goods">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="stocks" column="stocks" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="pic" column="pic" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <update id="updateStock">
+        update goods set stocks = stocks - 1 where id = #{goodsId} and stocks > 0
+    </update>
 </mapper>

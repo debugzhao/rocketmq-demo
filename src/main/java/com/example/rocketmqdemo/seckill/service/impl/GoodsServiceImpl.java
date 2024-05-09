@@ -37,19 +37,20 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods>  implement
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void readReduceStock(OrderDto orderDto) {
-        Long goodsId = orderDto.getGoodsId();
-        Goods goods = this.baseMapper.selectById(goodsId);
-        log.info("消费的商品数据：{}", goods);
-        int finalStock = goods.getStocks() - 1;
-        if (finalStock < 0) {
-            throw new RuntimeException("商品id: " + goodsId + "库存不足, 用户id：" + orderDto.getUserId());
-        }
-        goods.setStocks(finalStock);
-        goods.setUpdateTime(new Date());
-        int result = this.baseMapper.updateById(goods);
+//        Long goodsId = orderDto.getGoodsId();
+//        Goods goods = this.baseMapper.selectById(goodsId);
+//        log.info("消费的商品数据：{}", goods);
+//        int finalStock = goods.getStocks() - 1;
+//        if (finalStock < 0) {
+//            throw new RuntimeException("商品id: " + goodsId + "库存不足, 用户id：" + orderDto.getUserId());
+//        }
+//        goods.setStocks(finalStock);
+//        goods.setUpdateTime(new Date());
+//        int result = this.baseMapper.updateById(goods);
+        int result = this.baseMapper.updateStock(orderDto.getGoodsId().intValue());
         if (result > 0) {
             OrderRecords record = new OrderRecords();
-            record.setGoodsId(goodsId.intValue());
+            record.setGoodsId(orderDto.getGoodsId().intValue());
             record.setUserId(orderDto.getUserId().intValue());
             record.setCreateTime(new Date());
             orderRecordsService.save(record);
